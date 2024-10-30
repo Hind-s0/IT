@@ -19,10 +19,10 @@ if "page" not in st.session_state:
 if "submitted" not in st.session_state:
     st.session_state.submitted = False
 
-# عنوان التطبيق
+
 st.title("IT Programs")
 
-# أزرار التنقل
+#  التنقل
 if st.sidebar.button("Data Entry"):
     st.session_state.page = "Data Entry"
     st.session_state.submitted = False
@@ -30,25 +30,23 @@ if st.sidebar.button("Data Entry"):
 if st.sidebar.button("Dashboard"):
     st.session_state.page = "Dashboard"
 
-# صفحة إدخال البيانات
+#  إدخال البيانات
 if st.session_state.page == "Data Entry":
     st.header("Program Data Entry Form")
 
     if st.session_state.submitted:
         st.success("Data has already been submitted.")
     else:
-        # تجميع البيانات من المستخدم
+        # جمع البيانات  
         program_name = st.text_input("Program Name")
         responsible_dept = st.text_input("Responsible Department")
-        
+        beneficiary_group = st.multiselect("Beneficiary Group", ["Students", "Faculty", "Staff"])
         colleges = [
             "College of Arts", "College of Science", "College of Engineering",
             "College of Medicine", "College of Pharmacy", "College of Business",
             "College of Computer Science", "College of Law", "College of Environmental Design",
             "College of Humanities", "College of Dentistry", "College of Health Sciences"
         ]
-        
-        beneficiary_group = st.multiselect("Beneficiary Group", ["Students", "Faculty", "Staff"])
         beneficiary_colleges = st.multiselect("Beneficiary Colleges", colleges)
         program_purpose = st.text_input("Program Purpose")
         license_type = st.selectbox("License Type", ["Open-source", "Paid", "In-house Developed"])
@@ -66,7 +64,7 @@ if st.session_state.page == "Data Entry":
         current_program_state = st.selectbox("Current Program State", ["In use", "Outdated", "Needs Replacement"])
         future_viability = st.selectbox("Future Viability", ["Expand", "Phase Out"])
         total_cost_to_date = st.number_input("Total Cost to Date", min_value=0.0)
-#"Submit" لحفظ البيانات
+#"Submit" حفظ البيانات
         if st.button("Submit"):
             data = {
                 "Program Name": program_name,
