@@ -1,20 +1,19 @@
 import streamlit as st
 import pandas as pd
+import io
 
-# مسار حفظ ملف CSV
-CSV_FILE_PATH = "C:/Users/Hind/Desktop/IT Program Tracking Sheet.csv"
+# اسم ملف CSV لتخزين البيانات
+data_buffer = io.StringIO()
 
-# وظيفة لحفظ البيانات في ملف CSV
+# وظيفة لحفظ البيانات في الذاكرة
 def save_data(data):
-    # تحميل البيانات الحالية إذا كان الملف موجودًا
-    df_existing = pd.read_csv(CSV_FILE_PATH) if pd.io.common.file_exists(CSV_FILE_PATH) else pd.DataFrame()
-
-    # إضافة البيانات الجديدة
+    # إضافة البيانات الجديدة إلى الذاكرة
+    df_existing = pd.read_csv(data_buffer.getvalue()) if data_buffer.getvalue() else pd.DataFrame()
     df_combined = pd.concat([df_existing, pd.DataFrame([data])], ignore_index=True)
-
-    # حفظ البيانات إلى ملف CSV
-    df_combined.to_csv(CSV_FILE_PATH, index=False)  # حفظ البيانات
-    print("Data saved successfully.")
+    
+    # كتابة البيانات إلى الذاكرة كملف CSV
+    df_combined.to_csv(data_buffer, index=False)
+    print("Data saved successfully in memory.")
 
 # التحقق من Session State
 if "page" not in st.session_state:
@@ -22,7 +21,6 @@ if "page" not in st.session_state:
 if "submitted" not in st.session_state:
     st.session_state.submitted = False
 
-# عنوان التطبيق
 st.title("IT Programs")
 
 # أزرار التنقل
@@ -39,8 +37,15 @@ if st.session_state.page == "Data Entry":
 
     if st.session_state.submitted:
         st.success("Data has already been submitted.")
+        # زر لتنزيل البيانات
+        st.download_button(
+            label="Download Data as CSV",
+            data=data_buffer.getvalue(),
+            file_name="data.csv",
+            mime="text/csv"
+        )
     else:
-        # تجميع البيانات من المستخدم
+        # جمع البيانات  
         program_name = st.text_input("Program Name")
         responsible_dept = st.text_input("Responsible Department")
         beneficiary_group = st.multiselect("Beneficiary Group", ["Students", "Faculty", "Staff"])
