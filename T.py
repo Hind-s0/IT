@@ -2,15 +2,14 @@ import streamlit as st
 import pandas as pd
 
 # Excel
-EXCEL_FILE_PATH = "C:/Users/Hind/Desktop/IT Program Tracking Sheet.xlsx"
+E= "C:/Users/Hind/Desktop/IT Program Tracking Sheet.xlsx"
 
-# وظيفة لحفظ البيانات في ملف Excel 
-def save_data(data):
-    df_existing = pd.read_excel(EXCEL_FILE_PATH) if pd.io.common.file_exists(EXCEL_FILE_PATH) else pd.DataFrame()
-    
+# لحفظ البيانات في ملف Excel 
+def save_data(data):  
+    df_existing = pd.read_excel(E) if pd.io.common.file_exists(E) else pd.DataFrame()  
     df_combined = pd.concat([df_existing, pd.DataFrame([data])], ignore_index=True)
     
-    df_combined.to_excel(EXCEL_FILE_PATH, index=False)  # حفظ البيانات
+    df_combined.to_excel(E, index=False) 
     print("Data saved successfully.")
 
 # التحقق من Session State
@@ -22,7 +21,7 @@ if "submitted" not in st.session_state:
 
 st.title("IT Programs")
 
-#  التنقل
+# لتنقل
 if st.sidebar.button("Data Entry"):
     st.session_state.page = "Data Entry"
     st.session_state.submitted = False
@@ -30,7 +29,7 @@ if st.sidebar.button("Data Entry"):
 if st.sidebar.button("Dashboard"):
     st.session_state.page = "Dashboard"
 
-#  إدخال البيانات
+# إدخال البيانات
 if st.session_state.page == "Data Entry":
     st.header("Program Data Entry Form")
 
@@ -44,9 +43,10 @@ if st.session_state.page == "Data Entry":
         colleges = [
             "College of Arts", "College of Science", "College of Engineering",
             "College of Medicine", "College of Pharmacy", "College of Business",
-            "College of Computer Science", "College of Law", "College of Environmental Design",
+            "College of Computer Science", "College of Law",
             "College of Humanities", "College of Dentistry", "College of Health Sciences"
         ]
+        
         beneficiary_colleges = st.multiselect("Beneficiary Colleges", colleges)
         program_purpose = st.text_input("Program Purpose")
         license_type = st.selectbox("License Type", ["Open-source", "Paid", "In-house Developed"])
@@ -64,7 +64,7 @@ if st.session_state.page == "Data Entry":
         current_program_state = st.selectbox("Current Program State", ["In use", "Outdated", "Needs Replacement"])
         future_viability = st.selectbox("Future Viability", ["Expand", "Phase Out"])
         total_cost_to_date = st.number_input("Total Cost to Date", min_value=0.0)
-#"Submit" حفظ البيانات
+#"Submit" 
         if st.button("Submit"):
             data = {
                 "Program Name": program_name,
@@ -95,7 +95,7 @@ if st.session_state.page == "Data Entry":
                 st.session_state.submitted = True
                 st.success("Data submitted successfully")
             else:
-                st.error("Please fill in all fields before submitting.")
+                st.error("Please fill in all fields before submitting")
 
 # Dashboard
 elif st.session_state.page == "Dashboard":
